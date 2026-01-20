@@ -17,7 +17,7 @@ A full-stack web application built using **Flask**, **MySQL**, and **HTML/CSS/Ja
 - Paste all the queries that are present in data.sql in MySQL
 
 ## Environment Configuration
-# .env file (project root)
+### .env file (project root)
 
 DB_TYPE=mysql
 DB_HOST=localhost
