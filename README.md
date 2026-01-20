@@ -18,16 +18,14 @@ A full-stack web application built using **Flask**, **MySQL**, and **HTML/CSS/Ja
 
 ## Environment Configuration
 ### .env file (project root)
-
-DB_TYPE=mysql
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=traffic_violation_db
-
-APP_HOST=0.0.0.0
-APP_PORT=5000
-DEBUG=True
+- DB_TYPE=mysql
+- DB_HOST=localhost
+- DB_USER=root
+- DB_PASSWORD=your_mysql_password
+- DB_NAME=traffic_violation_db
+- APP_HOST=0.0.0.0
+- APP_PORT=5000
+- DEBUG=True
 
 ## Install Dependencies
 - python -m venv venv
