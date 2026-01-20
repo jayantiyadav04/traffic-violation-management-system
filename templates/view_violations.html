@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Violations</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        :root {
+            --bg-page: #faf7f2;
+            --bg-card: #ffffff;
+            --primary: #d97706;
+            --primary-dark: #92400e;
+            --secondary: #6b7280;
+
+            --text-main: #3f2f1d;
+            --text-muted: #7c6f64;
+            --border-light: #e7e2da;
+
+            --success-bg: #e6f4ea;
+            --success-text: #1e7f4f;
+
+            --danger-bg: #fdecea;
+            --danger-text: #8a1f11;
+
+            --warning-bg: #fff6e5;
+            --warning-text: #8a5a00;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-page);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text-main);
+        }
+
+        /* ================= PAGE ================= */
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ================= HEADER ================= */
+        .page-header {
+            background: var(--bg-card);
+            padding: 25px 30px;
+            border-radius: 12px;
+            border-left: 6px solid var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* ================= BUTTONS ================= */
+        .back-btn {
+            background: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: #4b5563;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-pay {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-pay:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ================= CONTENT ================= */
+        .content-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        /* ================= STATS ================= */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: #fffaf3;
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid var(--primary);
+            text-align: center;
+        }
+
+        .stat-box .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-box .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* ================= FILTERS ================= */
+        .filters-section {
+            background: #fdfaf6;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 30px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+        }
+
+        /* ================= TABLE ================= */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: #fdfaf6;
+        }
+
+        table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 14px;
+        }
+
+        table tr:hover {
+            background: #faf7f2;
+        }
+
+        /* ================= STATUS BADGES ================= */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .status-unpaid {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+        }
+
+        .status-disputed {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 992px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="page-header">
+            <h1>📋 View Traffic Violations</h1>
+            <a href="/dashboard" class="back-btn">← Back</a>
+        </div>
+
+        <div class="content-card">
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="label">Total Violations</div>
+                    <div class="value" id="totalCount">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Unpaid</div>
+                    <div class="value" id="unpaidCount">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Paid</div>
+                    <div class="value" id="paidCount">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Total Fines</div>
+                    <div class="value" id="totalFines">₹0</div>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <input type="text" id="searchInput" placeholder="Search by vehicle number or owner..."
+                            onkeyup="filterViolations()">
+                    </div>
+                    <div class="filter-group">
+                        <select id="statusFilter" onchange="filterViolations()">
+                            <option value="">All Statuses</option>
+                            <option value="unpaid">Unpaid</option>
+                            <option value="paid">Paid</option>
+                            <option value="disputed">Disputed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="typeFilter" onchange="filterViolations()">
+                            <option value="">All Types</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <button class="btn" onclick="clearFilters()"
+                            style="width:100%; background:#6c757d; color:white;">Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vehicle</th>
+                        <th>Owner</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Fine</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="violationsBody">
+                    <tr>
+                        <td colspan="9" style="text-align:center;">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let allViolations = [];
+        let filteredViolations = [];
+
+        window.onload = async function () {
+            await loadViolations();
+            await loadViolationTypes();
+        };
+
+        async function loadViolations() {
+            try {
+                const response = await fetch('/api/violations');
+                const data = await response.json();
+
+                if (data.success) {
+                    allViolations = data.data;
+                    filteredViolations = [...allViolations];
+                    updateStats();
+                    displayViolations();
+                }
+            } catch (error) {
+                console.error('Error loading violations:', error);
+                document.getElementById('violationsBody').innerHTML =
+                    '<tr><td colspan="9" style="text-align:center;color:red;">Error loading data</td></tr>';
+            }
+        }
+
+        async function loadViolationTypes() {
+            try {
+                const response = await fetch('/api/violation-types');
+                const data = await response.json();
+
+                if (data.success) {
+                    const typeFilter = document.getElementById('typeFilter');
+                    data.data.forEach(type => {
+                        const option = document.createElement('option');
+                        option.value = type.type_name;
+                        option.textContent = type.type_name;
+                        typeFilter.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading types:', error);
+            }
+        }
+
+        function updateStats() {
+            const total = filteredViolations.length;
+            const unpaid = filteredViolations.filter(v => v.status === 'unpaid').length;
+            const paid = filteredViolations.filter(v => v.status === 'paid').length;
+            const totalFines = filteredViolations.reduce((sum, v) => sum + parseFloat(v.fine_amount || 0), 0);
+
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('unpaidCount').textContent = unpaid;
+            document.getElementById('paidCount').textContent = paid;
+            document.getElementById('totalFines').textContent = '₹' + totalFines.toLocaleString();
+        }
+
+        function displayViolations() {
+            const tbody = document.getElementById('violationsBody');
+            tbody.innerHTML = '';
+
+            if (filteredViolations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">No violations found</td></tr>';
+                return;
+            }
+
+            filteredViolations.forEach(v => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>#${v.violation_id}</td>
+                    <td><strong>${v.vehicle_number}</strong></td>
+                    <td>${v.owner_name || 'N/A'}</td>
+                    <td>${v.type_name}</td>
+                    <td>${v.area_name}</td>
+                    <td>${formatDateTime(v.violation_date)}</td>
+                    <td><strong>₹${parseFloat(v.fine_amount).toLocaleString()}</strong></td>
+                    <td><span class="status-badge status-${v.status}">${v.status.toUpperCase()}</span></td>
+                    <td>
+                        ${v.status === 'unpaid' ?
+                        `<button class="btn btn-pay" onclick="markAsPaid(${v.violation_id})">Pay</button>` :
+                        '-'}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterViolations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+
+            filteredViolations = allViolations.filter(v => {
+                const matchesSearch = v.vehicle_number.toLowerCase().includes(searchTerm) ||
+                    (v.owner_name && v.owner_name.toLowerCase().includes(searchTerm));
+                const matchesStatus = !statusFilter || v.status === statusFilter;
+                const matchesType = !typeFilter || v.type_name === typeFilter;
+
+                return matchesSearch && matchesStatus && matchesType;
+            });
+            filteredViolations.sort(
+                (a, b) => new Date(b.violation_date) - new Date(a.violation_date)
+            );
+
+
+            updateStats();
+            displayViolations();
+
+
+            updateStats();
+            displayViolations();
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('typeFilter').value = '';
+            filterViolations();
+        }
+
+        async function markAsPaid(violationId) {
+            if (!confirm('Mark this violation as paid?')) return;
+
+            try {
+                const response = await fetch(`/api/violations/${violationId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'paid' })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Payment recorded successfully!');
+                    await loadViolations();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating status');
+            }
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+    </script>
+</body>
+
+</html>

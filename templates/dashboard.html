@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Traffic Violation System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        :root {
+            --bg-page: #faf7f2;
+            --bg-card: #ffffff;
+            --primary: #d97706;
+            --primary-dark: #92400e;
+            --text-main: #3f2f1d;
+            --text-muted: #7c6f64;
+            --border-light: #e7e2da;
+
+            --success-bg: #e6f4ea;
+            --success-text: #1e7f4f;
+
+            --danger-bg: #fdecea;
+            --danger-text: #8a1f11;
+
+            --warning-bg: #fff6e5;
+            --warning-text: #8a5a00;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-page);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text-main);
+        }
+
+        /* ================= CONTAINER ================= */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background: var(--bg-card);
+            padding: 20px 30px;
+            border-radius: 12px;
+            border-left: 6px solid var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        /* ================= USER INFO ================= */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info span {
+            background: #fff3e0;
+            color: var(--primary-dark);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* ================= BUTTONS ================= */
+        .logout-btn {
+            background: #b91c1c;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #991b1b;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ================= NAV TABS ================= */
+        .nav-tabs {
+            background: var(--bg-card);
+            padding: 15px 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 15px;
+            color: var(--text-muted);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ================= CONTENT ================= */
+        .content {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            min-height: 500px;
+        }
+
+        /* ================= STATS ================= */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #fffaf3;
+            padding: 25px;
+            border-radius: 12px;
+            border-top: 4px solid var(--primary);
+        }
+
+        .stat-card h3 {
+            font-size: 15px;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .stat-card .number {
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* ================= TABLE ================= */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        table th {
+            background: #fdfaf6;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: #faf7f2;
+        }
+
+        /* ================= STATUS BADGES ================= */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .status-unpaid {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+        }
+
+        .status-disputed {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>🚦 Traffic Violation System</h1>
+            </div>
+            <div class="user-info">
+                <span id="userRole">Loading...</span>
+                <span id="userName">Loading...</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="location.href='/dashboard'">Dashboard</button>
+            <button class="tab-btn" onclick="location.href='/register-violation'">Register Violation</button>
+            <button class="tab-btn" onclick="location.href='/view-violations'">View Violations</button>
+            <button class="tab-btn" onclick="location.href='/analytics'">Analytics</button>
+        </nav>
+
+        <div class="content">
+            <h2 style="margin-bottom: 20px;">Dashboard Overview</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Violations</h3>
+                    <div class="number" id="totalViolations">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Fines</h3>
+                    <div class="number" id="totalFines">₹0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Collected</h3>
+                    <div class="number" id="collectedAmount">₹0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending</h3>
+                    <div class="number" id="pendingAmount">₹0</div>
+                </div>
+            </div>
+
+            <h3>Recent Violations</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vehicle</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Fine</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentViolationsBody">
+                    <tr>
+                        <td colspan="7" style="text-align:center;">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let violations = [];
+
+        // Load user info and data on page load
+        window.onload = async function () {
+            await loadUserInfo();
+            await loadStatistics();
+            await loadViolations();
+        };
+
+        // Load user information
+        async function loadUserInfo() {
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            if (!user || !user.role) return;
+
+            document.getElementById('userRole').textContent =
+                capitalizeFirst(user.role);
+            document.getElementById('userName').textContent =
+                user.full_name || user.username;
+
+            const registerBtn = document.querySelector('button[onclick*="/register-violation"]');
+            const analyticsBtn = document.querySelector('button[onclick*="/analytics"]');
+
+            // Citizen restrictions
+            if (user.role === 'citizen') {
+                if (registerBtn) registerBtn.style.display = 'none';
+                if (analyticsBtn) analyticsBtn.style.display = 'none';
+            }
+
+            // Officer restrictions
+            if (user.role === 'officer') {
+                if (analyticsBtn) analyticsBtn.style.display = 'none';
+            }
+
+            // Admin → sees everything
+        }
+
+
+        // Load statistics from API
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('totalViolations').textContent = stats.total_count;
+                    document.getElementById('totalFines').textContent = formatCurrency(stats.total_amount);
+                    document.getElementById('collectedAmount').textContent = formatCurrency(stats.paid_amount);
+                    document.getElementById('pendingAmount').textContent = formatCurrency(stats.unpaid_amount);
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // Load violations from API
+        async function loadViolations() {
+            try {
+                const response = await fetch('/api/violations');
+                const data = await response.json();
+
+                if (data.success) {
+                    violations = data.data;
+                    updateViolationsTable();
+                }
+            } catch (error) {
+                console.error('Error loading violations:', error);
+                document.getElementById('recentViolationsBody').innerHTML =
+                    '<tr><td colspan="7" style="text-align:center;color:red;">Error loading data</td></tr>';
+            }
+        }
+
+        // Update violations table
+        function updateViolationsTable() {
+            const tbody = document.getElementById('recentViolationsBody');
+            tbody.innerHTML = '';
+
+            if (violations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No violations found</td></tr>';
+                return;
+            }
+            const sortedViolations = violations.sort((a, b) => b.violation_id - a.violation_id);
+            const recentViolations = sortedViolations.slice(0, 5);
+
+            recentViolations.forEach(v => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${v.violation_id}</td>
+                    <td><strong>${v.vehicle_number}</strong></td>
+                    <td>${v.type_name}</td>
+                    <td>${v.area_name}</td>
+                    <td>${formatDateTime(v.violation_date)}</td>
+                    <td><strong>₹${parseFloat(v.fine_amount).toLocaleString()}</strong></td>
+                    <td><span class="status-badge status-${v.status}">${v.status.toUpperCase()}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return '₹' + parseFloat(amount || 0).toLocaleString('en-IN', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Format date time
+        function formatDateTime(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Capitalize first letter
+        function capitalizeFirst(string) {
+            if (!string) return '';
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
+                window.location.href = '/login';
+            }
+        }
+    </script>
+</body>
+
+</html>
