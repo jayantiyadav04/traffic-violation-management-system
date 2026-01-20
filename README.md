@@ -14,4 +14,4 @@ A full-stack web application built using **Flask**, **MySQL**, and **HTML/CSS/Ja
 
 ## Database
 SQL schema and sample data are provided in:
- - backend/database/data.sql
+ - /database/data.sql
