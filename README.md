@@ -12,23 +12,6 @@ A full-stack web application built using **Flask**, **MySQL**, and **HTML/CSS/Ja
 - Database: MySQL
 - Frontend: HTML, CSS, JavaScript
 
-## Project Structure
-
-traffic_violation_system/
-├── backend/
-│   ├── database/
-│   │   └── data.sql
-│   ├── models/
-│   ├── managers/
-│   └── utils/
-├── frontend/
-│   └── static/
-├── templates/
-├── main.py
-├── config.py
-├── requirements.txt
-└── .env
-
 ## Database Setup
 - Create database traffic_violation_db
 - Paste all the queries that are present in data.sql in MySQL
@@ -46,7 +29,7 @@ APP_HOST=0.0.0.0
 APP_PORT=5000
 DEBUG=True
 
-## 📦 Install Dependencies
+## Install Dependencies
 - python -m venv venv
 - venv\Scripts\activate
 - pip install -r requirements.txt
